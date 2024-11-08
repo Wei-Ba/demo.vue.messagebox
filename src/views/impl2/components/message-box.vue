@@ -1,12 +1,14 @@
 <script lang="ts" setup>
-import { ref, VNode } from 'vue'
+import { ref, watch } from 'vue'
 import { MessageBoxProps } from '.'
 import { BaseMessageBox } from '@components'
 const props = defineProps<MessageBoxProps>()
-defineSlots<{default:() => VNode | string}>()
 const emit = defineEmits<{
   close: []
 }>()
+watch(() => props, () => {
+  console.log(props)
+})
 const isDestory = ref(false)
 const handleClose = () => {
   isDestory.value = true

@@ -1,7 +1,7 @@
 import MessageBoxComponent from './message-box.vue'
-import { render, h, VNode } from 'vue'
+import { render, VNode, createVNode,h, reactive, watch } from 'vue'
 
-import { isString, isFunction } from '@/utils'
+import { isString, isFunction, tryToRefs } from '@utils'
 
 export type MessageBoxComponent = typeof MessageBoxComponent
 export interface MessageBoxProps {
@@ -14,15 +14,18 @@ interface MessageBoxOptions extends MessageBoxProps{}
 
 function CreateMessageBox(options: MessageBoxOptions){
   const container = document.createElement('div')
+  const props = reactive({
+    ...tryToRefs(options)
+  })
+  
+  const children = !isString(props.message) ? { default: isFunction(props.message) ? props.message : () => props.message} : null
 
-  const children = !isString(options.message) ? { default: isFunction(options.message) ? options.message : () => options.message} : null
-  const vnode = h(MessageBoxComponent, options, children as never)
+  const vnode = createVNode(MessageBoxComponent, props, children)
   render(vnode, container)
 }
 
 MessageBoxComponent.create = CreateMessageBox
-MessageBoxComponent.alert = (message: MessageBoxOptions['message'], title?: MessageBoxOptions['title']) => {
-  if (!title) title = ''
+MessageBoxComponent.alert = (message: MessageBoxOptions['message'], title: MessageBoxOptions['title']) => {
   CreateMessageBox({
     title,
     message

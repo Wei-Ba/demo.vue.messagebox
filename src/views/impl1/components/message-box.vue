@@ -3,7 +3,7 @@ import { ref } from 'vue'
 import { BaseMessageBox } from '@components'
 const props = defineProps({
   title: [String],
-  message: [String],
+  message: [String, Function],
   to: [Object, String]
 })
 

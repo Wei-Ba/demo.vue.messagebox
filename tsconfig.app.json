@@ -4,9 +4,6 @@
     "tsBuildInfoFile": "node_modules/.cache/tsconfig.app.tsbuildinfo",
     "baseUrl": "./src",
     "paths": {
-      "@/*": [
-        "*"
-      ],
       "@components/*": [
         "components/*"
       ],
@@ -24,6 +21,9 @@
       ],
       "@utils": [
         "utils"
+      ],
+      "@/*": [
+        "*"
       ]
     }
   },

@@ -1,8 +1,12 @@
 import MessageBoxComponent from './message-box.vue'
-import { h, VNode, inject } from 'vue'
+import { h, VNode, inject, reactive, createVNode } from 'vue'
 
-import { isString, isFunction } from '@/utils'
+
+import { isString, isFunction } from '@utils'
 import { FrameworkPopperContext, FrameworkPopperContextToken } from './framework'
+import { tryToRefs } from '@utils'
+
+
 
 export interface MessageBoxProps {
   title: string,
@@ -13,10 +17,15 @@ export interface MessageBoxProps {
 interface MessageBoxOptions extends MessageBoxProps{}
 
 function CreateMessageBox(this: FrameworkPopperContext, options: MessageBoxOptions){
-
+  const context = this
   const children = !isString(options.message) ? { default: isFunction(options.message) ? options.message : () => options.message} : null
-  Reflect.set(options, '__close__', () => { this.remove(vnode) })
-  const vnode = h(() => h(MessageBoxComponent, options, children as never))
+
+  const props = reactive({
+    ...tryToRefs(options),
+    __close__(){ context.remove(vnode) }
+  })
+  const resolveProps = () => props
+  const vnode = createVNode(() => createVNode(MessageBoxComponent, resolveProps(), children))
   this.append(vnode)
 }
 
@@ -27,7 +36,6 @@ function alert(this: FrameworkPopperContext,  message: MessageBoxOptions['messag
     message
   })
 }
-type MessageBoxComponent = typeof MessageBoxComponent
 
 export function useMessageBox(){
   const context = inject(FrameworkPopperContextToken)

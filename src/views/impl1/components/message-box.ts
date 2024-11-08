@@ -1,10 +1,9 @@
 import MessageBoxComponent from './message-box.vue'
-import { render, h, VNode, MaybeRef, isProxy, unref } from 'vue'
+import { render, VNode, MaybeRef, unref, createVNode, reactive, computed,watch } from 'vue'
 import { isFunction } from '@utils/is'
+import { tryToRefs } from '@utils/vue'
 
 export type MessageBoxComponent = typeof MessageBoxComponent
-
-const tryGetValue = (val: any) => isFunction(val) ? val() : unref(val)
 
 interface MessageBoxOptions {
   title: MaybeRef<string> | (() => string)
@@ -14,18 +13,17 @@ interface MessageBoxOptions {
 
 function CreateMessageBox(options: MessageBoxOptions){
   const container = document.createElement('div')
-  
-  options = isProxy(options) ? options : new Proxy(options, {
-    get(t, p, r){
-      if(['title', 'to', 'message'].includes(p as string)) return tryGetValue(Reflect.get(t, p, r))
-      return Reflect.get(t, p, r)
-    }
+
+  const props = reactive({
+    ...tryToRefs(options),
+    title: computed(isFunction(options.title) ? options.title : () => options.title),
   })
-  const children = { default: isFunction(options.message) ? options.message : () => options.message} //isVNode(options.message) ? options.message : isFunction(options.message) ? { default: options.message } : null
+  
+  const children = { default: isFunction(props.message) ? props.message : () => props.message}
  
-  const vnode = h(() => h(
+  const vnode = createVNode(() => createVNode(
     MessageBoxComponent, 
-    options as any,
+    props,
     children
   ))
   render(vnode, container)

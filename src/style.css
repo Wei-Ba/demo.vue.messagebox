@@ -1,0 +1,23 @@
+*, ::before, ::after{
+  outline: none;
+  box-sizing: border-box;
+}
+
+button {
+  height: 36px;
+  padding: 0 16px;
+  --btn-back-color: #1141c7; 
+  --btn-front-color: #fff;
+  color: var(--btn-front-color);
+  background-color: var(--btn-back-color);
+  border-radius: 4px;
+  border: 1px solid var(--btn-back-color);
+  font-size: 14px;
+  transition: all .3s;
+  &:hover{
+    --btn-back-color: #5970f0;
+  }
+  &:active{
+    --btn-back-color: #042fa5; 
+  }
+}

@@ -1,18 +1,26 @@
-# Vite Vue Starter
+# Vue Messagebox Demo
 
-This is a project template using [Vite](https://vitejs.dev/). It requires [Node.js](https://nodejs.org) version 18+ or 20+.
+这是一个使用`vite`+`vue`实现的消息框的示例  
+内含不同的实现方式
 
-To start:
-
+## 运行项目:  
+### npm
 ```sh
 npm install
 npm run dev
+```
 
-# if using yarn:
-yarn
-yarn dev
+### pnpm
 
-# if using pnpm:
-pnpm install
+```sh
+pnpm insatll
 pnpm run dev
 ```
+
+### bun
+```sh
+bun i
+bun run dev
+```
+
+或者使用其他兼容`NPM`包的包管理器
